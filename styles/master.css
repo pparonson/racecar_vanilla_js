@@ -35,6 +35,16 @@
   border-radius: 3px;
 }
 
+.dashboard {
+  background-color: black;
+  color: white;
+  text-align: right;
+  padding: 2px;
+  font-size: 1.5em;
+  width:100%;
+  z-index: 300;
+}
+
 .road:before {
   content: "|";
   vertical-align: "top";

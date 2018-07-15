@@ -18,6 +18,7 @@ btnStart.addEventListener("click", startGame)
 document.addEventListener("keydown", pressKeyOn)
 document.addEventListener("keyup", pressKeyOff)
 
+// keydown eventHandler
 function pressKeyOn(e) {
   e.preventDefault()
   // console.log(keys)
@@ -28,6 +29,7 @@ function pressKeyOn(e) {
   }
 }
 
+// keyup eventHandler
 function pressKeyOff(e) {
   e.preventDefault()
   console.log(keys)
@@ -41,11 +43,12 @@ function pressKeyOff(e) {
 function updateDashboard() {
   const {speed, lives, gameScore, carsToPass} = player
   // console.log(player)
-  speedDash.innerHTML = speed
+  speedDash.innerHTML = Math.round(speed * 10.2)
   scoreDash.innerHTML = gameScore
   lifeDash.innerHTML = lives
 }
 
+// btnStart eventHandler
 function startGame() {
   let div = document.createElement("div")
   div.setAttribute("class", "playerCar")
@@ -59,7 +62,7 @@ function startGame() {
 
   // constantly changing variables
   player = {
-    speed: 1
+    speed: 0
     , lives: 3
     , gameScore: 0
     , carsToPass: 10
@@ -89,18 +92,26 @@ function playGame() {
     // player movement
     const {w, s, a, d} = keys // destructure
     if (w) {
-      player.ele.y += (-1)
+      if (player.ele.y > 275) {
+        player.ele.y += (-1)
+      }
       player.speed = player.speed < 20 ? (player.speed + 0.05) : 20
     }
     if (s) {
-      player.ele.y += (1)
+      if (player.ele.y < 500) {
+        player.ele.y += (1)
+      }
       player.speed = player.speed > 0 ? (player.speed - 0.1) : 0
     }
     if (a) {
-      player.ele.x += (-1)
+      if (player.speed !== 0) {
+        player.ele.x += (-1)
+      }
     }
     if (d) {
-      player.ele.x += (1)
+      if (player.speed !== 0) {
+        player.ele.x += (1)
+      }
     }
   }
 
