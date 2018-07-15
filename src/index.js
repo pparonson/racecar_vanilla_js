@@ -5,6 +5,7 @@ const btnStart = document.querySelector(".btnStart")
 const container = document.getElementById("container")
 
 // game variables
+let player;
 let gamePlay = false
 let keys = {
   w: false // up
@@ -12,15 +13,14 @@ let keys = {
   , a: false // left
   , d: false // right
 }
-let player;
 
 btnStart.addEventListener("click", startGame)
 document.addEventListener("keydown", pressKeyOn)
-document.addEventListener("keydown", pressKeyOff)
+document.addEventListener("keyup", pressKeyOff)
 
 function pressKeyOn(e) {
   e.preventDefault()
-  console.log(keys)
+  // console.log(keys)
   for (let i in keys) {
     if ( keys.hasOwnProperty(e.key) ) {
       keys[e.key] = true
@@ -64,6 +64,7 @@ function startGame() {
     , gameScore: 0
     , carsToPass: 10
     , roadWidth: 250
+    , ele: div // player position obj
   }
   requestAnimationFrame(playGame)
   // create game board (ie road)
@@ -84,7 +85,28 @@ function playGame() {
   if (gamePlay) {
     // console.log("Game in play")
     updateDashboard()
+
+    // player movement
+    const {w, s, a, d} = keys // destructure
+    if (w) {
+      player.ele.y += (-1)
+      player.speed = player.speed < 20 ? (player.speed + 0.05) : 20
+    }
+    if (s) {
+      player.ele.y += (1)
+      player.speed = player.speed > 0 ? (player.speed - 0.1) : 0
+    }
+    if (a) {
+      player.ele.x += (-1)
+    }
+    if (d) {
+      player.ele.x += (1)
+    }
   }
+
+  player.ele.style.top = player.ele.y + "px"
+  player.ele.style.left = player.ele.x + "px"
+
   // callback fn
   requestAnimationFrame(playGame)
 }
