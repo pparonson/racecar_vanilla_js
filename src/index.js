@@ -40,6 +40,23 @@ function pressKeyOff(e) {
   }
 }
 
+function moveRoad() {
+  let tempRoad = document.querySelectorAll(".road")
+  // get the x axis of the previous road tile
+  let previousRoad = tempRoad[0].offsetLeft
+  // loop through the road tiles and update positions relative to playerCar
+  // speed
+  for (let i = 0; i < tempRoad.length; i++) {
+    // get the y axis of the road tile and add speed
+    let num = tempRoad[i].offsetTop + player.speed
+    // update the road tile position
+    if (num > 600) {
+      num = num - 635
+    }
+    tempRoad[i].style.top = num + "px"
+  }
+}
+
 function updateDashboard() {
   const {speed, lives, gameScore, carsToPass} = player
   // console.log(player)
@@ -88,6 +105,7 @@ function playGame() {
   if (gamePlay) {
     // console.log("Game in play")
     updateDashboard()
+    moveRoad()
 
     // player movement
     const {w, s, a, d} = keys // destructure
