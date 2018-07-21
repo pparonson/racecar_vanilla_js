@@ -89,6 +89,7 @@ function startGame() {
   requestAnimationFrame(playGame)
   // create game board (ie road)
   startBoard()
+  setupEnemyCars(20)
 }
 
 function startBoard() {
@@ -101,12 +102,61 @@ function startBoard() {
   }
 }
 
+function setupEnemyCars(num) {
+  for (let i = 0; i < num; i++) {
+    // create carsToPass
+    let temp = "enemyCar"
+    let div = document.createElement("div")
+    div.innerHTML = i + 1 // car number
+    div.setAttribute("class", "enemyCar")
+    div.setAttribute( "id", "enemyCar" + (i + 1) )
+    div.style.backgroundColor = randomColor()
+    div.style["text-align"] = "center"
+    div.style.color = "white"
+    positionEnemyCar(div)
+    container.appendChild(div)
+  }
+}
+
+function positionEnemyCar(ele) {
+  let tempRoad = document.querySelector(".road")
+  // set the random position of the enemyCar on the road
+  // I think tempRoad.offsetWidth sets the upper bound
+  ele.style.left = tempRoad.offsetLeft
+    + Math.ceil(Math.random() * tempRoad.offsetWidth) - (30) + "px"
+
+  // multiplying by -400 so enemyCars begin offscreen
+  ele.style.top = Math.ceil(Math.random() * (-400) + "px")
+  // set enemyCar speed
+  ele.speed = Math.ceil(Math.random() * 17)
+}
+
+function moveEnemyCars() {
+  // get a ref to enemyCars by class name {
+  let enemyCarsElements = document.querySelectorAll(".enemyCar")
+  for (let i = 0; i < enemyCarsElements.length; i++) {
+    let enemyCar = enemyCarsElements[i]
+    // get a ref to enemyCar speed from positionEnemyCar fn
+    // offsetTop returns the distance of current ele to top of the parent node
+    let y = enemyCar.offsetTop
+      + (player.speed - enemyCar.speed)
+    // reset car pos if moves offscreen
+    if (y > 2000 || y < -2000) {
+      // resets top position and speed
+      positionEnemyCar(enemyCar)
+    } else {
+      // move the enemyCar with dynamically changing y relative to playerCar speed
+      enemyCar.style.top = y + "px"
+    }
+  }
+}
+
 function playGame() {
   if (gamePlay) {
     // console.log("Game in play")
     updateDashboard()
     moveRoad()
-
+    moveEnemyCars()
     // player movement
     const {w, s, a, d} = keys // destructure
     if (w) {
@@ -138,4 +188,16 @@ function playGame() {
 
   // callback fn
   requestAnimationFrame(playGame)
+}
+
+// helper fns
+
+// return random hex color value
+// 16 - The number will show as an hexadecimal value
+function randomColor() {
+  function c() {
+    let hex = Math.floor(Math.random() * 256).toString(16)
+    return ("0" + String(hex)).substr(-2) // pad with zero
+  }
+  return "#" + c() + c() + c()
 }

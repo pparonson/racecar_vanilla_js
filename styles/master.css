@@ -67,3 +67,15 @@
   background-size: cover;
   z-index: 100;
 }
+
+.enemyCar {
+  position: absolute;
+  height: 80px;
+  width: 40px;
+  top: 0px;
+  left: 0px;
+  border-radius: 5px;
+  background-image: url("../images/car2.png");
+  background-size: cover;
+  z-index: 99;
+}
